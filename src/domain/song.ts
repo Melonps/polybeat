@@ -22,5 +22,5 @@ export type Song = z.infer<typeof SongSchema>;
 export const Song = {
   schema: SongSchema,
   totalMeasures: (song: Song) =>
-    song.sections.reduce((sum, section) => sum + section.measureCount, 0),
+    song.sections.reduce((sum, section) => sum + Section.measureCount(section), 0),
 } as const;

@@ -15,7 +15,7 @@ interface TimelineProps {
   onDeleteSection: (sectionId: Section["id"]) => void;
   onDuplicateSection: (sectionId: Section["id"]) => void;
   onReorderSections: (fromId: Section["id"], toId: Section["id"]) => void;
-  onMeasureCountChange: (sectionId: Section["id"], measureCount: number) => void;
+  onRepeatCountChange: (sectionId: Section["id"], repeatCount: number) => void;
   onTapSectionForLoop: (sectionId: Section["id"]) => void;
 }
 
@@ -30,7 +30,7 @@ export function Timeline({
   onDeleteSection,
   onDuplicateSection,
   onReorderSections,
-  onMeasureCountChange,
+  onRepeatCountChange,
   onTapSectionForLoop,
 }: TimelineProps) {
   const [editMode, setEditMode] = useState(false);
@@ -108,6 +108,9 @@ export function Timeline({
               <SectionCard
                 section={section}
                 isActive={isActive}
+                activeMeasureInSection={
+                  isPlaying && position.kind === "Active" ? position.measureInSection : null
+                }
                 activeClickIndex={
                   isPlaying && position.kind === "Active" ? position.clickIndex : null
                 }
@@ -118,9 +121,7 @@ export function Timeline({
                 onEdit={() => onEditSection(section)}
                 onDelete={() => onDeleteSection(section.id)}
                 onDuplicate={() => onDuplicateSection(section.id)}
-                onMeasureCountChange={(measureCount) =>
-                  onMeasureCountChange(section.id, measureCount)
-                }
+                onRepeatCountChange={(repeatCount) => onRepeatCountChange(section.id, repeatCount)}
                 onTapForLoop={() => onTapSectionForLoop(section.id)}
                 onDragStart={() => setDraggingId(section.id)}
                 onDragOver={() => setDropTargetId(section.id)}

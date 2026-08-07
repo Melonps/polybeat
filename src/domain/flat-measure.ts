@@ -18,28 +18,34 @@ export type FlatMeasure = Readonly<{
 }>;
 
 /**
- * Expands every section's `measureCount` into individual measures, producing a flat,
- * globally-indexed list the audio engine and UI can both walk through sequentially.
+ * Expands every section's `pattern` (cycled `repeatCount` times) into individual
+ * measures, producing a flat, globally-indexed list the audio engine and UI can both
+ * walk through sequentially. A section with `pattern: [12/8, 4/8]` and
+ * `repeatCount: 8` yields 16 measures alternating 12/8, 4/8, 12/8, 4/8, ...
  */
 function flatten(sections: readonly Section[]): FlatMeasure[] {
   const measures: FlatMeasure[] = [];
   let index = 0;
 
   sections.forEach((section, sectionIndex) => {
-    for (let measureInSection = 0; measureInSection < section.measureCount; measureInSection++) {
-      measures.push({
-        index,
-        measureNumber: index + 1,
-        sectionId: section.id,
-        sectionIndex,
-        measureInSection,
-        numerator: section.numerator,
-        denominator: section.denominator,
-        grouping: section.grouping,
-        // The rehearsal mark only applies to the first measure of the section.
-        rehearsalMark: measureInSection === 0 ? section.rehearsalMark : null,
-      });
-      index += 1;
+    let measureInSection = 0;
+    for (let repeat = 0; repeat < section.repeatCount; repeat++) {
+      for (const step of section.pattern) {
+        measures.push({
+          index,
+          measureNumber: index + 1,
+          sectionId: section.id,
+          sectionIndex,
+          measureInSection,
+          numerator: step.numerator,
+          denominator: step.denominator,
+          grouping: step.grouping,
+          // The rehearsal mark only applies to the first measure of the section.
+          rehearsalMark: measureInSection === 0 ? section.rehearsalMark : null,
+        });
+        index += 1;
+        measureInSection += 1;
+      }
     }
   });
 

@@ -4,6 +4,7 @@ export { Denominator } from "./denominator";
 export { FlatMeasure } from "./flat-measure";
 export { Grouping } from "./grouping";
 export { Loop } from "./loop";
+export { MeasurePattern } from "./measure-pattern";
 export { MetronomeEngine } from "./metronome-engine";
 export { PlaybackPosition } from "./playback-position";
 export { RehearsalMark } from "./rehearsal-mark";

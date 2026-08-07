@@ -18,6 +18,7 @@ type Active = Readonly<{
   measureNumber: number;
   sectionId: SectionId;
   sectionIndex: number;
+  measureInSection: number;
   rehearsalMark: RehearsalMark | null;
   clickIndex: number;
   accent: ClickAccent;

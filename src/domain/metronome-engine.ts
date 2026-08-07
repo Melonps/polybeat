@@ -346,6 +346,7 @@ export class MetronomeEngine {
       measureNumber: measure.measureNumber,
       sectionId: measure.sectionId,
       sectionIndex: measure.sectionIndex,
+      measureInSection: measure.measureInSection,
       rehearsalMark: this.currentRehearsalMark(measure),
       clickIndex,
       accent,

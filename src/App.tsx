@@ -147,10 +147,10 @@ export function App() {
                 onDeleteSection={(sectionId) => deleteSection(selectedSong.id, sectionId)}
                 onDuplicateSection={(sectionId) => duplicateSection(selectedSong.id, sectionId)}
                 onReorderSections={(fromId, toId) => reorderSections(selectedSong.id, fromId, toId)}
-                onMeasureCountChange={(sectionId, measureCount) =>
+                onRepeatCountChange={(sectionId, repeatCount) =>
                   updateSection(selectedSong.id, sectionId, (section) => ({
                     ...section,
-                    measureCount,
+                    repeatCount,
                   }))
                 }
                 onTapSectionForLoop={handleTapSectionForLoop}
