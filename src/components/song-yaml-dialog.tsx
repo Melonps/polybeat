@@ -71,7 +71,7 @@ export function SongYamlDialog({ song, onImport }: SongYamlDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle>YAMLでエクスポート / インポート</DialogTitle>
           <DialogDescription>
@@ -82,7 +82,7 @@ export function SongYamlDialog({ song, onImport }: SongYamlDialogProps) {
         <Textarea
           value={text}
           onChange={(event) => setText(event.target.value)}
-          className="min-h-72 font-mono text-xs"
+          className="min-h-56 flex-1 resize-none overflow-y-auto font-mono text-xs"
           spellCheck={false}
         />
 

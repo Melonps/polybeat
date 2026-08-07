@@ -52,7 +52,7 @@ export function SectionEditor({ section, onOpenChange, onSave }: SectionEditorPr
 
   return (
     <Dialog open={section !== null} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="flex max-h-[85vh] w-full max-w-sm flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle>セクションを編集</DialogTitle>
           <DialogDescription>
@@ -60,7 +60,7 @@ export function SectionEditor({ section, onOpenChange, onSave }: SectionEditorPr
           </DialogDescription>
         </DialogHeader>
 
-        <FieldGroup>
+        <FieldGroup className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
           <Field>
             <FieldLabel htmlFor="section-name">セクション名</FieldLabel>
             <Input
