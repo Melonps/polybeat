@@ -12,4 +12,5 @@ export { SectionId } from "./section-id";
 export { Song } from "./song";
 export { SongId } from "./song-id";
 export { SongRepository } from "./song-repository";
+export { SongYaml } from "./song-yaml";
 export { TempoUnit } from "./tempo-unit";

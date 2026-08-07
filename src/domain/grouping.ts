@@ -39,7 +39,7 @@ function defaultGrouping(numerator: number): Grouping {
  * is always the downbeat; the first click of every subsequent group is a subaccent; every
  * other click is a weak beat.
  */
-function computeAccents(grouping: Grouping): ClickAccent[] {
+function computeAccents(grouping: readonly number[]): ClickAccent[] {
   const total = Grouping.sum(grouping);
   const accents: ClickAccent[] = new Array(total).fill("weak");
 
@@ -54,7 +54,7 @@ function computeAccents(grouping: Grouping): ClickAccent[] {
 
 export const Grouping = {
   schema: GroupingSchema,
-  sum: (grouping: Grouping) => grouping.reduce((total, size) => total + size, 0),
+  sum: (grouping: readonly number[]) => grouping.reduce((total, size) => total + size, 0),
   default: defaultGrouping,
   computeAccents,
 } as const;
