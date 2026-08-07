@@ -151,7 +151,7 @@ export function SectionCard({
         </div>
         <div className="flex items-center gap-3">
           <span className="w-28 shrink-0 text-xs text-muted-foreground">
-            {section.repeatCount} 回繰り返し
+            {section.repeatCount} loop
           </span>
           <Slider
             className="flex-1"
