@@ -86,7 +86,7 @@ function createSampleSong(): Song {
       }),
       Section.create({
         name: "Eの4/8まで",
-        pattern: [{ numerator: 9, denominator: 8, grouping: [3, 3, 3] }],
+        pattern: [{ numerator: 9, denominator: 8, grouping: [3, 2, 2, 2] }],
         repeatCount: 11,
         rehearsalMark: "E",
       }),
