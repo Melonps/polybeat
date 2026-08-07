@@ -84,39 +84,43 @@ export function SectionCard({
           </span>
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            aria-label="複製"
-            onClick={(event) => {
-              event.stopPropagation();
-              onDuplicate();
-            }}
-          >
-            <CopyIcon />
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            aria-label="編集"
-            onClick={(event) => {
-              event.stopPropagation();
-              onEdit();
-            }}
-          >
-            <PencilIcon />
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            aria-label="削除"
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelete();
-            }}
-          >
-            <TrashIcon />
-          </Button>
+          {editMode ? (
+            <>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                aria-label="複製"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDuplicate();
+                }}
+              >
+                <CopyIcon />
+              </Button>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                aria-label="編集"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onEdit();
+                }}
+              >
+                <PencilIcon />
+              </Button>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                aria-label="削除"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelete();
+                }}
+              >
+                <TrashIcon />
+              </Button>
+            </>
+          ) : null}
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
