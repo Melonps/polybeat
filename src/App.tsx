@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { CountInControls } from "@/components/count-in-controls";
 import { Legend } from "@/components/legend";
 import { LoopControls } from "@/components/loop-controls";
+import { MobilePlaybackFab } from "@/components/mobile-playback-fab";
 import { SectionEditor } from "@/components/section-editor";
 import { SongLibrary } from "@/components/song-library";
 import { SongNameEditor } from "@/components/song-name-editor";
@@ -92,7 +93,7 @@ export function App() {
         }}
       />
       <SidebarInset>
-        <div className="flex flex-col gap-4 p-4 md:p-6">
+        <div className="flex flex-col gap-4 p-4 pb-24 md:p-6 md:pb-6">
           <div className="flex items-center gap-3">
             <SidebarTrigger />
             {hasSong ? (
@@ -161,6 +162,8 @@ export function App() {
           )}
         </div>
       </SidebarInset>
+
+      {hasSong ? <MobilePlaybackFab isPlaying={isPlaying} onToggle={toggle} /> : null}
 
       <SectionEditor
         section={editorSection}
