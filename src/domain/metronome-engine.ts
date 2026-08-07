@@ -105,12 +105,20 @@ export class MetronomeEngine {
     }
 
     if (!this.audioContext) {
-      this.audioContext = new AudioContext();
+      // Safari <14.1 only exposes the vendor-prefixed constructor.
+      const AudioContextCtor =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      this.audioContext = new AudioContextCtor();
     }
 
-    if (this.audioContext.state === "suspended") {
-      void this.audioContext.resume();
-    }
+    // iOS Safari (and some Android WebViews) suspend the context whenever the tab is
+    // backgrounded/locked, and only allow resuming it synchronously inside a user
+    // gesture. `start()` is always called from the Play button's click handler, so this
+    // runs inside that gesture — but we resume unconditionally (not just when
+    // `state === "suspended"`) because iOS has been observed reporting a stale state.
+    void this.audioContext.resume();
+    this.unlockAudioContext(this.audioContext);
 
     this.currentMeasureIndex = Math.min(
       Math.max(0, this.song.loop.enabled ? this.song.loop.startMeasure - 1 : 0),
@@ -159,6 +167,22 @@ export class MetronomeEngine {
     this.playStateListeners.forEach((listener) => {
       listener(false);
     });
+  }
+
+  /**
+   * Plays a near-silent, essentially instantaneous buffer synchronously within the
+   * calling user-gesture handler. On iOS Safari, `resume()` alone is not always enough
+   * to fully unlock audio output — actually starting a source node (even a silent one)
+   * inside the gesture is what reliably flips the context into a state where later,
+   * lookahead-scheduled clicks (which run outside any gesture) are still audible.
+   * Idempotent/cheap enough to call on every `start()`.
+   */
+  private unlockAudioContext(ctx: AudioContext) {
+    const buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(ctx.destination);
+    source.start(0);
   }
 
   private scheduleClick(
