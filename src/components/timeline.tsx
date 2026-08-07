@@ -1,5 +1,5 @@
 import { CheckIcon, PencilIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SectionCard } from "@/components/section-card";
 import { Button } from "@/components/ui/button";
 import type { PlaybackPosition, Section, Song } from "@/domain";
@@ -36,8 +36,16 @@ export function Timeline({
   const [editMode, setEditMode] = useState(false);
   const [draggingId, setDraggingId] = useState<Section["id"] | null>(null);
   const [dropTargetId, setDropTargetId] = useState<Section["id"] | null>(null);
+  const activeSectionRef = useRef<HTMLDivElement | null>(null);
 
   const activeSectionIndex = isPlaying && position.kind === "Active" ? position.sectionIndex : null;
+
+  useEffect(() => {
+    if (activeSectionIndex === null) {
+      return;
+    }
+    activeSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [activeSectionIndex]);
 
   const startIndex = loopRangeStartId
     ? song.sections.findIndex((section) => section.id === loopRangeStartId)
@@ -93,39 +101,42 @@ export function Timeline({
                 ? "in-range"
                 : "none";
 
+          const isActive = activeSectionIndex === index;
+
           return (
-            <SectionCard
-              key={section.id}
-              section={section}
-              isActive={activeSectionIndex === index}
-              activeClickIndex={
-                isPlaying && position.kind === "Active" ? position.clickIndex : null
-              }
-              loopRangeState={loopRangeState}
-              editMode={editMode}
-              isDragging={draggingId === section.id}
-              isDropTarget={editMode && dropTargetId === section.id && draggingId !== section.id}
-              onEdit={() => onEditSection(section)}
-              onDelete={() => onDeleteSection(section.id)}
-              onDuplicate={() => onDuplicateSection(section.id)}
-              onMeasureCountChange={(measureCount) =>
-                onMeasureCountChange(section.id, measureCount)
-              }
-              onTapForLoop={() => onTapSectionForLoop(section.id)}
-              onDragStart={() => setDraggingId(section.id)}
-              onDragOver={() => setDropTargetId(section.id)}
-              onDrop={() => {
-                if (draggingId && draggingId !== section.id) {
-                  onReorderSections(draggingId, section.id);
+            <div key={section.id} ref={isActive ? activeSectionRef : undefined}>
+              <SectionCard
+                section={section}
+                isActive={isActive}
+                activeClickIndex={
+                  isPlaying && position.kind === "Active" ? position.clickIndex : null
                 }
-                setDraggingId(null);
-                setDropTargetId(null);
-              }}
-              onDragEnd={() => {
-                setDraggingId(null);
-                setDropTargetId(null);
-              }}
-            />
+                loopRangeState={loopRangeState}
+                editMode={editMode}
+                isDragging={draggingId === section.id}
+                isDropTarget={editMode && dropTargetId === section.id && draggingId !== section.id}
+                onEdit={() => onEditSection(section)}
+                onDelete={() => onDeleteSection(section.id)}
+                onDuplicate={() => onDuplicateSection(section.id)}
+                onMeasureCountChange={(measureCount) =>
+                  onMeasureCountChange(section.id, measureCount)
+                }
+                onTapForLoop={() => onTapSectionForLoop(section.id)}
+                onDragStart={() => setDraggingId(section.id)}
+                onDragOver={() => setDropTargetId(section.id)}
+                onDrop={() => {
+                  if (draggingId && draggingId !== section.id) {
+                    onReorderSections(draggingId, section.id);
+                  }
+                  setDraggingId(null);
+                  setDropTargetId(null);
+                }}
+                onDragEnd={() => {
+                  setDraggingId(null);
+                  setDropTargetId(null);
+                }}
+              />
+            </div>
           );
         })}
       </div>
