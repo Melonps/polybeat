@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "kamae": {
+      "source": "iwasa-kosui/kamae-ts",
+      "sourceType": "github",
+      "skillPath": "skills/kamae/SKILL.md",
+      "computedHash": "092df19cb3dc6efae9f7521fb1baedaa529272cce05648c623a9c72bac9d174c"
+    },
+    "kamae-review": {
+      "source": "iwasa-kosui/kamae-ts",
+      "sourceType": "github",
+      "skillPath": "skills/kamae-review/SKILL.md",
+      "computedHash": "900ea6deb22fdd9522ad685618b20e7aa96213aa735bab480aeaddd1747554ff"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
+    }
+  }
+}
