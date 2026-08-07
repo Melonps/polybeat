@@ -123,46 +123,55 @@ export function SectionCard({
           ) : null}
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          {section.pattern.map((step, stepIndex) => {
-            const isStepActive =
-              isActive &&
-              activeMeasureInSection !== null &&
-              activeMeasureInSection % section.pattern.length === stepIndex;
-            return (
-              <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: pattern steps are a fixed-order sequence, not a reorderable list
-                key={`${stepIndex}-${step.numerator}-${step.denominator}`}
-                className="flex items-center gap-2"
-              >
-                {Section.isAlternating(section) ? (
-                  <span className="w-12 shrink-0 font-mono text-xs text-muted-foreground">
-                    {step.numerator}/{step.denominator}
-                  </span>
-                ) : null}
-                <BeatGrid
-                  grouping={step.grouping}
-                  activeClickIndex={isStepActive ? activeClickIndex : null}
-                />
-              </div>
-            );
-          })}
-        </div>
+      <CardContent className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <span className="w-28 shrink-0 text-xs text-muted-foreground">
-            {section.repeatCount} loop
-          </span>
-          <Slider
-            className="flex-1"
-            value={section.repeatCount}
-            min={1}
-            max={99}
-            step={1}
-            onValueChange={(value) => onRepeatCountChange(Array.isArray(value) ? value[0] : value)}
-            onClick={(event) => event.stopPropagation()}
-          />
+          <div className="flex flex-1 flex-col gap-2">
+            {section.pattern.map((step, stepIndex) => {
+              const isStepActive =
+                isActive &&
+                activeMeasureInSection !== null &&
+                activeMeasureInSection % section.pattern.length === stepIndex;
+              return (
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: pattern steps are a fixed-order sequence, not a reorderable list
+                  key={`${stepIndex}-${step.numerator}-${step.denominator}`}
+                  className="flex items-center gap-2"
+                >
+                  {Section.isAlternating(section) ? (
+                    <span className="w-12 shrink-0 font-mono text-xs text-muted-foreground">
+                      {step.numerator}/{step.denominator}
+                    </span>
+                  ) : null}
+                  <BeatGrid
+                    grouping={step.grouping}
+                    activeClickIndex={isStepActive ? activeClickIndex : null}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          {!editMode ? (
+            <span className="shrink-0 text-xs text-muted-foreground">× {section.repeatCount}</span>
+          ) : null}
         </div>
+        {editMode ? (
+          <div className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-xs text-muted-foreground">
+              {section.repeatCount} loop
+            </span>
+            <Slider
+              className="flex-1"
+              value={section.repeatCount}
+              min={1}
+              max={99}
+              step={1}
+              onValueChange={(value) =>
+                onRepeatCountChange(Array.isArray(value) ? value[0] : value)
+              }
+              onClick={(event) => event.stopPropagation()}
+            />
+          </div>
+        ) : null}
         {loopRangeState === "pending-start" ? (
           <Badge variant="outline" className="w-fit border-amber-500 text-amber-500">
             タップして終了セクションを選択
