@@ -1,3 +1,5 @@
+import { ChevronDownIcon } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -19,29 +21,37 @@ export function CountInControls({ countIn, onChange }: CountInControlsProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-2">
-        <Switch
-          id="count-in-enabled"
-          checked={countIn.enabled}
-          onCheckedChange={(checked) => commit({ ...countIn, enabled: checked })}
-        />
-        <FieldLabel htmlFor="count-in-enabled">予備拍</FieldLabel>
-      </div>
+    <Collapsible className="rounded-xl border border-border bg-card">
+      <CollapsibleTrigger className="flex w-full items-center justify-between p-4 text-sm font-medium">
+        予備拍
+        <ChevronDownIcon className="size-4 text-muted-foreground transition-transform data-[panel-open]:rotate-180" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="flex flex-wrap items-center gap-4 p-4 pt-0">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="count-in-enabled"
+              checked={countIn.enabled}
+              onCheckedChange={(checked) => commit({ ...countIn, enabled: checked })}
+            />
+            <FieldLabel htmlFor="count-in-enabled">有効</FieldLabel>
+          </div>
 
-      <div className="flex items-center gap-2">
-        <Input
-          type="number"
-          aria-label="予備拍の数"
-          className="w-20"
-          min={MIN_BEATS}
-          max={MAX_BEATS}
-          value={countIn.beats}
-          disabled={!countIn.enabled}
-          onChange={(event) => commit({ ...countIn, beats: Number(event.target.value) || 1 })}
-        />
-        <span className="text-sm text-muted-foreground">拍</span>
-      </div>
-    </div>
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              aria-label="予備拍の数"
+              className="w-20"
+              min={MIN_BEATS}
+              max={MAX_BEATS}
+              value={countIn.beats}
+              disabled={!countIn.enabled}
+              onChange={(event) => commit({ ...countIn, beats: Number(event.target.value) || 1 })}
+            />
+            <span className="text-sm text-muted-foreground">拍</span>
+          </div>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

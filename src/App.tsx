@@ -125,6 +125,18 @@ export function App() {
                 onTempoUnitChange={(unit) => setTempoUnit(selectedSong.id, unit)}
               />
 
+              {totalSections > 0 ? (
+                <LoopControls
+                  song={selectedSong}
+                  onLoopChange={(loop) => setLoop(selectedSong.id, loop)}
+                />
+              ) : null}
+
+              <CountInControls
+                countIn={selectedSong.countIn}
+                onChange={(countIn) => setCountIn(selectedSong.id, countIn)}
+              />
+
               <Timeline
                 song={selectedSong}
                 isPlaying={isPlaying}
@@ -142,18 +154,6 @@ export function App() {
                   }))
                 }
                 onTapSectionForLoop={handleTapSectionForLoop}
-              />
-
-              {totalSections > 0 ? (
-                <LoopControls
-                  song={selectedSong}
-                  onLoopChange={(loop) => setLoop(selectedSong.id, loop)}
-                />
-              ) : null}
-
-              <CountInControls
-                countIn={selectedSong.countIn}
-                onChange={(countIn) => setCountIn(selectedSong.id, countIn)}
               />
 
               <Legend />
