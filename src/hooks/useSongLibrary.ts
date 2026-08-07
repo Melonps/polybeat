@@ -120,6 +120,49 @@ export function useSongLibrary() {
     [updateSong],
   );
 
+  /** Replaces a song's entire content (e.g. from a YAML import) while keeping its existing id/selection. */
+  const replaceSong = useCallback(
+    (id: SongId, replacement: Song) => {
+      updateSong(id, () => ({ ...replacement, id }));
+    },
+    [updateSong],
+  );
+
+  const duplicateSection = useCallback(
+    (id: SongId, sectionId: SectionId) => {
+      updateSong(id, (song) => {
+        const index = song.sections.findIndex((section) => section.id === sectionId);
+        if (index < 0) {
+          return song;
+        }
+        const copy = Section.duplicate(song.sections[index]);
+        const sections = [...song.sections];
+        sections.splice(index + 1, 0, copy);
+        return { ...song, sections };
+      });
+    },
+    [updateSong],
+  );
+
+  /** Moves the section identified by `fromId` to just before the section identified by `toId`. */
+  const reorderSections = useCallback(
+    (id: SongId, fromId: SectionId, toId: SectionId) => {
+      updateSong(id, (song) => {
+        const fromIndex = song.sections.findIndex((section) => section.id === fromId);
+        const toIndex = song.sections.findIndex((section) => section.id === toId);
+        if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) {
+          return song;
+        }
+        const sections = [...song.sections];
+        const [moved] = sections.splice(fromIndex, 1);
+        const insertAt = sections.findIndex((section) => section.id === toId);
+        sections.splice(insertAt, 0, moved);
+        return { ...song, sections };
+      });
+    },
+    [updateSong],
+  );
+
   return {
     songs,
     selectedSong,
@@ -135,5 +178,8 @@ export function useSongLibrary() {
     addSection,
     updateSection,
     deleteSection,
+    duplicateSection,
+    reorderSections,
+    replaceSong,
   };
 }

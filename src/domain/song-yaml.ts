@@ -26,7 +26,10 @@ function parse(yamlText: string): SongYamlParseResult {
 
   const result = Song.schema.safeParse(raw);
   if (!result.success) {
-    return { success: false, message: result.error.issues.map((issue) => issue.message).join(", ") };
+    return {
+      success: false,
+      message: result.error.issues.map((issue) => issue.message).join(", "),
+    };
   }
 
   return { success: true, song: { ...result.data, id: SongId.generate() } };

@@ -22,6 +22,7 @@ function createSampleSong(): Song {
     countIn: CountIn.default(),
     sections: [
       Section.create({
+        name: "Intro",
         numerator: 9,
         denominator: 8,
         grouping: [2, 2, 2, 3],
@@ -29,6 +30,7 @@ function createSampleSong(): Song {
         rehearsalMark: "A",
       }),
       Section.create({
+        name: "Bridge",
         numerator: 3,
         denominator: 8,
         grouping: [3],
@@ -36,6 +38,7 @@ function createSampleSong(): Song {
         rehearsalMark: "B",
       }),
       Section.create({
+        name: "Verse",
         numerator: 5,
         denominator: 8,
         grouping: [3, 2],

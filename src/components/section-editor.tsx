@@ -61,6 +61,16 @@ export function SectionEditor({ section, onOpenChange, onSave }: SectionEditorPr
         </DialogHeader>
 
         <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="section-name">セクション名</FieldLabel>
+            <Input
+              id="section-name"
+              value={draft.name}
+              placeholder="例: Verse"
+              onChange={(event) => setDraft({ ...draft, name: event.target.value })}
+            />
+          </Field>
+
           <div className="flex gap-3">
             <Field className="flex-1">
               <FieldLabel htmlFor="section-numerator">分子</FieldLabel>

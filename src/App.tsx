@@ -5,10 +5,11 @@ import { LoopControls } from "@/components/loop-controls";
 import { SectionEditor } from "@/components/section-editor";
 import { SongLibrary } from "@/components/song-library";
 import { SongNameEditor } from "@/components/song-name-editor";
+import { SongYamlDialog } from "@/components/song-yaml-dialog";
 import { Timeline } from "@/components/timeline";
 import { TransportControls } from "@/components/transport-controls";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import type { Section } from "@/domain";
+import { FlatMeasure, Loop, type Section } from "@/domain";
 import { useMetronome } from "@/hooks/useMetronome";
 import { useSongLibrary } from "@/hooks/useSongLibrary";
 
@@ -28,10 +29,14 @@ export function App() {
     addSection,
     updateSection,
     deleteSection,
+    duplicateSection,
+    reorderSections,
+    replaceSong,
   } = useSongLibrary();
 
   const { isPlaying, position, toggle } = useMetronome(selectedSong);
   const [editingSection, setEditingSection] = useState<Section | null>(null);
+  const [loopRangeStartId, setLoopRangeStartId] = useState<Section["id"] | null>(null);
 
   const totalSections = selectedSong?.sections.length ?? 0;
   const hasSong = selectedSong !== null;
@@ -42,6 +47,34 @@ export function App() {
     }
     return selectedSong.sections.find((section) => section.id === editingSection.id) ?? null;
   }, [editingSection, selectedSong]);
+
+  const handleTapSectionForLoop = (sectionId: Section["id"]) => {
+    if (!selectedSong) {
+      return;
+    }
+
+    if (!loopRangeStartId) {
+      setLoopRangeStartId(sectionId);
+      return;
+    }
+
+    const startIndex = selectedSong.sections.findIndex(
+      (section) => section.id === loopRangeStartId,
+    );
+    const endIndex = selectedSong.sections.findIndex((section) => section.id === sectionId);
+    setLoopRangeStartId(null);
+
+    if (startIndex < 0 || endIndex < 0) {
+      return;
+    }
+
+    const measures = FlatMeasure.flatten(selectedSong.sections);
+    const range = Loop.measureRangeForSections(measures, startIndex, endIndex);
+    if (!range) {
+      return;
+    }
+    setLoop(selectedSong.id, { enabled: true, ...range });
+  };
 
   return (
     <SidebarProvider>
@@ -69,6 +102,12 @@ export function App() {
                 onSave={(name) => renameSong(selectedSong.id, name)}
               />
             ) : null}
+            {hasSong ? (
+              <SongYamlDialog
+                song={selectedSong}
+                onImport={(song) => replaceSong(selectedSong.id, song)}
+              />
+            ) : null}
           </div>
 
           {!hasSong || !selectedSong ? (
@@ -90,15 +129,19 @@ export function App() {
                 song={selectedSong}
                 isPlaying={isPlaying}
                 position={position}
+                loopRangeStartId={loopRangeStartId}
                 onAddSection={() => addSection(selectedSong.id)}
                 onEditSection={setEditingSection}
                 onDeleteSection={(sectionId) => deleteSection(selectedSong.id, sectionId)}
+                onDuplicateSection={(sectionId) => duplicateSection(selectedSong.id, sectionId)}
+                onReorderSections={(fromId, toId) => reorderSections(selectedSong.id, fromId, toId)}
                 onMeasureCountChange={(sectionId, measureCount) =>
                   updateSection(selectedSong.id, sectionId, (section) => ({
                     ...section,
                     measureCount,
                   }))
                 }
+                onTapSectionForLoop={handleTapSectionForLoop}
               />
 
               {totalSections > 0 ? (
