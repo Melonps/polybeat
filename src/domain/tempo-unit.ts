@@ -19,8 +19,8 @@ const LABELS: Readonly<Record<TempoUnit, string>> = {
   dotted_eighth: "♪.",
   quarter: "♩",
   dotted_quarter: "♩.",
-  half: "𝅗𝅥",
-  dotted_half: "𝅗𝅥.",
+  half: "二分音符",
+  dotted_half: "付点二分音符",
 };
 
 const ORDER: readonly TempoUnit[] = [

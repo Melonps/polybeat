@@ -1,4 +1,11 @@
-import { CopyIcon, GripVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
+import {
+  CopyIcon,
+  Flag,
+  FlagTriangleRight,
+  GripVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
 import { BeatGrid } from "@/components/beat-grid";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +20,8 @@ interface SectionCardProps {
   activeMeasureInSection: number | null;
   activeClickIndex: number | null;
   loopRangeState: "none" | "pending-start" | "in-range";
+  isLoopStart: boolean;
+  isLoopEnd: boolean;
   editMode: boolean;
   isDragging: boolean;
   isDropTarget: boolean;
@@ -34,6 +43,8 @@ export function SectionCard({
   activeMeasureInSection,
   activeClickIndex,
   loopRangeState,
+  isLoopStart,
+  isLoopEnd,
   editMode,
   isDragging,
   isDropTarget,
@@ -66,7 +77,7 @@ export function SectionCard({
       }}
       onDragEnd={onDragEnd}
       className={cn(
-        "transition-colors",
+        "relative transition-colors",
         editMode ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
         isActive && "border-primary ring-1 ring-primary/40",
         loopRangeState === "pending-start" && "border-amber-500 ring-2 ring-amber-500/60",
@@ -75,6 +86,20 @@ export function SectionCard({
         isDropTarget && "border-primary border-dashed",
       )}
     >
+      {isLoopStart || isLoopEnd ? (
+        <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
+          {isLoopStart ? (
+            <span title="ループ開始" className="text-sky-500">
+              <Flag className="size-3.5" />
+            </span>
+          ) : null}
+          {isLoopEnd ? (
+            <span title="ループ終了" className="text-sky-500">
+              <FlagTriangleRight className="size-3.5" />
+            </span>
+          ) : null}
+        </div>
+      ) : null}
       <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
         <div className="flex items-center gap-2">
           {editMode ? <GripVerticalIcon className="size-4 text-muted-foreground" /> : null}

@@ -102,6 +102,12 @@ export function Timeline({
                 : "none";
 
           const isActive = activeSectionIndex === index;
+          const isLoopStart =
+            loopStartIndex !== undefined &&
+            index === Math.min(loopStartIndex, loopEndIndex ?? loopStartIndex);
+          const isLoopEnd =
+            loopEndIndex !== undefined &&
+            index === Math.max(loopEndIndex, loopStartIndex ?? loopEndIndex);
 
           return (
             <div key={section.id} ref={isActive ? activeSectionRef : undefined}>
@@ -115,6 +121,8 @@ export function Timeline({
                   isPlaying && position.kind === "Active" ? position.clickIndex : null
                 }
                 loopRangeState={loopRangeState}
+                isLoopStart={isLoopStart}
+                isLoopEnd={isLoopEnd}
                 editMode={editMode}
                 isDragging={draggingId === section.id}
                 isDropTarget={editMode && dropTargetId === section.id && draggingId !== section.id}
